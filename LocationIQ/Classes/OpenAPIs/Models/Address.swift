@@ -14,38 +14,68 @@ public struct Address: Codable {
     public var houseNumber: String?
     public var road: String?
     public var residential: String?
+    public var borough: String?
+    public var neighbourhood: String?
+    public var quarter: String?
+    public var hamlet: String?
+    public var suburb: String?
+    public var island: String?
     public var village: String?
+    public var town: String?
+    public var city: String?
+    public var cityDistrict: String?
     public var county: String?
     public var state: String?
+    public var stateDistrict: String?
     public var postcode: String?
     public var country: String?
     public var countryCode: String?
-    public var city: String?
+    public var stateCode: String?
 
-    public init(houseNumber: String?, road: String?, residential: String?, village: String?, county: String?, state: String?, postcode: String?, country: String?, countryCode: String?, city: String?) {
+    public init(houseNumber: String?, road: String?, residential: String?, borough: String?, neighbourhood: String?, quarter: String?, hamlet: String?, suburb: String?, island: String?, village: String?, town: String?, city: String?, cityDistrict: String?, county: String?, state: String?, stateDistrict: String?, postcode: String?, country: String?, countryCode: String?, stateCode: String?) {
         self.houseNumber = houseNumber
         self.road = road
         self.residential = residential
+        self.borough = borough
+        self.neighbourhood = neighbourhood
+        self.quarter = quarter
+        self.hamlet = hamlet
+        self.suburb = suburb
+        self.island = island
         self.village = village
+        self.town = town
+        self.city = city
+        self.cityDistrict = cityDistrict
         self.county = county
         self.state = state
+        self.stateDistrict = stateDistrict
         self.postcode = postcode
         self.country = country
         self.countryCode = countryCode
-        self.city = city
+        self.stateCode = stateCode
     }
 
     public enum CodingKeys: String, CodingKey { 
         case houseNumber = "house_number"
         case road
         case residential
+        case borough
+        case neighbourhood
+        case quarter
+        case hamlet
+        case suburb
+        case island
         case village
+        case town
+        case city
+        case cityDistrict = "city_district"
         case county
         case state
+        case stateDistrict = "state_district"
         case postcode
         case country
         case countryCode = "country_code"
-        case city
+        case stateCode = "state_code"
     }
 
 

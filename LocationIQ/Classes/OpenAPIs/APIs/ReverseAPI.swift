@@ -50,6 +50,14 @@ open class ReverseAPI {
     }
 
     /**
+     * enum for parameter statecode
+     */
+    public enum Statecode_reverse: Int {
+        case _0 = 0
+        case _1 = 1
+    }
+
+    /**
      Reverse Geocoding
      
      - parameter lat: (query) Latitude of the location to generate an address for. 
@@ -60,10 +68,11 @@ open class ReverseAPI {
      - parameter acceptLanguage: (query) Preferred language order for showing search results, overrides the value specified in the Accept-Language HTTP header. Defaults to en. To use native language for the response when available, use accept-language&#x3D;native (optional)
      - parameter namedetails: (query) Include a list of alternative names in the results. These may include language variants, references, operator and brand. (optional)
      - parameter extratags: (query) Include additional information in the result if available, e.g. wikipedia link, opening hours. (optional)
+     - parameter statecode: (query) Adds state or province code when available to the statecode key inside the address element. Currently supported for addresses in the USA, Canada and Australia. Defaults to 0 (optional)
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func reverse(lat: Double, lon: Double, format: Format_reverse, normalizecity: Normalizecity_reverse, addressdetails: Addressdetails_reverse? = nil, acceptLanguage: String? = nil, namedetails: Namedetails_reverse? = nil, extratags: Extratags_reverse? = nil, completion: @escaping ((_ data: Location?,_ error: Error?) -> Void)) {
-        reverseWithRequestBuilder(lat: lat, lon: lon, format: format, normalizecity: normalizecity, addressdetails: addressdetails, acceptLanguage: acceptLanguage, namedetails: namedetails, extratags: extratags).execute { (response, error) -> Void in
+    open class func reverse(lat: Double, lon: Double, format: Format_reverse, normalizecity: Normalizecity_reverse, addressdetails: Addressdetails_reverse? = nil, acceptLanguage: String? = nil, namedetails: Namedetails_reverse? = nil, extratags: Extratags_reverse? = nil, statecode: Statecode_reverse? = nil, completion: @escaping ((_ data: Location?,_ error: Error?) -> Void)) {
+        reverseWithRequestBuilder(lat: lat, lon: lon, format: format, normalizecity: normalizecity, addressdetails: addressdetails, acceptLanguage: acceptLanguage, namedetails: namedetails, extratags: extratags, statecode: statecode).execute { (response, error) -> Void in
             completion(response?.body, error)
         }
     }
@@ -84,9 +93,10 @@ open class ReverseAPI {
      - parameter acceptLanguage: (query) Preferred language order for showing search results, overrides the value specified in the Accept-Language HTTP header. Defaults to en. To use native language for the response when available, use accept-language&#x3D;native (optional)
      - parameter namedetails: (query) Include a list of alternative names in the results. These may include language variants, references, operator and brand. (optional)
      - parameter extratags: (query) Include additional information in the result if available, e.g. wikipedia link, opening hours. (optional)
+     - parameter statecode: (query) Adds state or province code when available to the statecode key inside the address element. Currently supported for addresses in the USA, Canada and Australia. Defaults to 0 (optional)
      - returns: RequestBuilder<Location> 
      */
-    open class func reverseWithRequestBuilder(lat: Double, lon: Double, format: Format_reverse, normalizecity: Normalizecity_reverse, addressdetails: Addressdetails_reverse? = nil, acceptLanguage: String? = nil, namedetails: Namedetails_reverse? = nil, extratags: Extratags_reverse? = nil) -> RequestBuilder<Location> {
+    open class func reverseWithRequestBuilder(lat: Double, lon: Double, format: Format_reverse, normalizecity: Normalizecity_reverse, addressdetails: Addressdetails_reverse? = nil, acceptLanguage: String? = nil, namedetails: Namedetails_reverse? = nil, extratags: Extratags_reverse? = nil, statecode: Statecode_reverse? = nil) -> RequestBuilder<Location> {
         let path = "/reverse.php"
         let URLString = LocationIQAPI.basePath + path
         let parameters: [String:Any]? = nil
@@ -100,7 +110,8 @@ open class ReverseAPI {
             "addressdetails": addressdetails?.rawValue, 
             "accept-language": acceptLanguage, 
             "namedetails": namedetails?.rawValue, 
-            "extratags": extratags?.rawValue
+            "extratags": extratags?.rawValue, 
+            "statecode": statecode?.rawValue
         ])
 
         let requestBuilder: RequestBuilder<Location>.Type = LocationIQAPI.requestBuilderFactory.getBuilder()

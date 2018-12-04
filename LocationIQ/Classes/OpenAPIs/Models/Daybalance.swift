@@ -12,9 +12,11 @@ import Foundation
 public struct Daybalance: Codable {
 
     public var day: Int?
+    public var bonus: Int?
 
-    public init(day: Int?) {
+    public init(day: Int?, bonus: Int?) {
         self.day = day
+        self.bonus = bonus
     }
 
 
