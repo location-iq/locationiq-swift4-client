@@ -6,11 +6,12 @@
 
 import Foundation
 
-open class LocationIQAPI {
-    open static var basePath = "https://eu1.locationiq.com/v1"
-    open static var credential: URLCredential?
-    open static var customHeaders: [String:String] = [:]
-    open static var requestBuilderFactory: RequestBuilderFactory = AlamofireRequestBuilderFactory()
+open class OpenAPIClientAPI {
+    public static var basePath = "https://eu1.locationiq.com/v1"
+    public static var credential: URLCredential?
+    public static var customHeaders: [String:String] = [:]
+    public static var requestBuilderFactory: RequestBuilderFactory = AlamofireRequestBuilderFactory()
+    public static var apiResponseQueue: DispatchQueue = .main
 }
 
 open class RequestBuilder<T> {
@@ -31,7 +32,7 @@ open class RequestBuilder<T> {
         self.isBody = isBody
         self.headers = headers
 
-        addHeaders(LocationIQAPI.customHeaders)
+        addHeaders(OpenAPIClientAPI.customHeaders)
     }
 
     open func addHeaders(_ aHeaders:[String:String]) {
@@ -50,7 +51,7 @@ open class RequestBuilder<T> {
     }
 
     open func addCredential() -> Self {
-        self.credential = LocationIQAPI.credential
+        self.credential = OpenAPIClientAPI.credential
         return self
     }
 }

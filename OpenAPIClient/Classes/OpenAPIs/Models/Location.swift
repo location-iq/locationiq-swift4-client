@@ -11,6 +11,7 @@ import Foundation
 
 public struct Location: Codable {
 
+    public var distance: Double?
     public var placeId: String?
     public var licence: String?
     public var osmType: String?
@@ -24,8 +25,10 @@ public struct Location: Codable {
     public var importance: Double?
     public var address: Address?
     public var namedetails: Namedetails?
+    public var matchquality: Matchquality?
 
-    public init(placeId: String?, licence: String?, osmType: String?, osmId: String?, boundingbox: [String]?, lat: String?, lon: String?, displayName: String?, _class: String?, type: String?, importance: Double?, address: Address?, namedetails: Namedetails?) {
+    public init(distance: Double?, placeId: String?, licence: String?, osmType: String?, osmId: String?, boundingbox: [String]?, lat: String?, lon: String?, displayName: String?, _class: String?, type: String?, importance: Double?, address: Address?, namedetails: Namedetails?, matchquality: Matchquality?) {
+        self.distance = distance
         self.placeId = placeId
         self.licence = licence
         self.osmType = osmType
@@ -39,9 +42,11 @@ public struct Location: Codable {
         self.importance = importance
         self.address = address
         self.namedetails = namedetails
+        self.matchquality = matchquality
     }
 
     public enum CodingKeys: String, CodingKey { 
+        case distance
         case placeId = "place_id"
         case licence
         case osmType = "osm_type"
@@ -55,6 +60,7 @@ public struct Location: Codable {
         case importance
         case address
         case namedetails
+        case matchquality
     }
 
 

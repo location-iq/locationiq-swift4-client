@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 
 
@@ -21,7 +20,6 @@ open class BalanceAPI {
         }
     }
 
-
     /**
      - GET /balance.php
      - The Balance API provides a count of request credits left in the user's account for the day. Balance is reset at midnight UTC everyday (00:00 UTC).
@@ -32,12 +30,12 @@ open class BalanceAPI {
      */
     open class func balanceWithRequestBuilder() -> RequestBuilder<Balance> {
         let path = "/balance.php"
-        let URLString = LocationIQAPI.basePath + path
+        let URLString = OpenAPIClientAPI.basePath + path
         let parameters: [String:Any]? = nil
         
         let url = URLComponents(string: URLString)
 
-        let requestBuilder: RequestBuilder<Balance>.Type = LocationIQAPI.requestBuilderFactory.getBuilder()
+        let requestBuilder: RequestBuilder<Balance>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
         return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
     }

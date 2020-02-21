@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 
 
@@ -89,14 +88,15 @@ open class SearchAPI {
      - parameter dedupe: (query) Sometimes you have several objects in OSM identifying the same place or object in reality. The simplest case is a street being split in many different OSM ways due to different characteristics. Nominatim will attempt to detect such duplicates and only return one match; this is controlled by the dedupe parameter which defaults to 1. Since the limit is, for reasons of efficiency, enforced before and not after de-duplicating, it is possible that de-duplicating leaves you with less results than requested. (optional)
      - parameter extratags: (query) Include additional information in the result if available, e.g. wikipedia link, opening hours. (optional)
      - parameter statecode: (query) Adds state or province code when available to the statecode key inside the address element. Currently supported for addresses in the USA, Canada and Australia. Defaults to 0 (optional)
+     - parameter matchquality: (query) Returns additional information about quality of the result in a matchquality object. Read more Defaults to 0 [0,1] (optional)
+     - parameter postaladdress: (query) Returns address inside the postaladdress key, that is specifically formatted for each country. Currently supported for addresses in Germany. Defaults to 0 [0,1] (optional)
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func search(q: String, format: Format_search, normalizecity: Normalizecity_search, addressdetails: Addressdetails_search? = nil, viewbox: String? = nil, bounded: Bounded_search? = nil, limit: Int? = nil, acceptLanguage: String? = nil, countrycodes: String? = nil, namedetails: Namedetails_search? = nil, dedupe: Dedupe_search? = nil, extratags: Extratags_search? = nil, statecode: Statecode_search? = nil, completion: @escaping ((_ data: [Location]?,_ error: Error?) -> Void)) {
-        searchWithRequestBuilder(q: q, format: format, normalizecity: normalizecity, addressdetails: addressdetails, viewbox: viewbox, bounded: bounded, limit: limit, acceptLanguage: acceptLanguage, countrycodes: countrycodes, namedetails: namedetails, dedupe: dedupe, extratags: extratags, statecode: statecode).execute { (response, error) -> Void in
+    open class func search(q: String, format: Format_search, normalizecity: Normalizecity_search, addressdetails: Addressdetails_search? = nil, viewbox: String? = nil, bounded: Bounded_search? = nil, limit: Int? = nil, acceptLanguage: String? = nil, countrycodes: String? = nil, namedetails: Namedetails_search? = nil, dedupe: Dedupe_search? = nil, extratags: Extratags_search? = nil, statecode: Statecode_search? = nil, matchquality: Int? = nil, postaladdress: Int? = nil, completion: @escaping ((_ data: [Location]?,_ error: Error?) -> Void)) {
+        searchWithRequestBuilder(q: q, format: format, normalizecity: normalizecity, addressdetails: addressdetails, viewbox: viewbox, bounded: bounded, limit: limit, acceptLanguage: acceptLanguage, countrycodes: countrycodes, namedetails: namedetails, dedupe: dedupe, extratags: extratags, statecode: statecode, matchquality: matchquality, postaladdress: postaladdress).execute { (response, error) -> Void in
             completion(response?.body, error)
         }
     }
-
 
     /**
      Forward Geocoding
@@ -118,31 +118,35 @@ open class SearchAPI {
      - parameter dedupe: (query) Sometimes you have several objects in OSM identifying the same place or object in reality. The simplest case is a street being split in many different OSM ways due to different characteristics. Nominatim will attempt to detect such duplicates and only return one match; this is controlled by the dedupe parameter which defaults to 1. Since the limit is, for reasons of efficiency, enforced before and not after de-duplicating, it is possible that de-duplicating leaves you with less results than requested. (optional)
      - parameter extratags: (query) Include additional information in the result if available, e.g. wikipedia link, opening hours. (optional)
      - parameter statecode: (query) Adds state or province code when available to the statecode key inside the address element. Currently supported for addresses in the USA, Canada and Australia. Defaults to 0 (optional)
+     - parameter matchquality: (query) Returns additional information about quality of the result in a matchquality object. Read more Defaults to 0 [0,1] (optional)
+     - parameter postaladdress: (query) Returns address inside the postaladdress key, that is specifically formatted for each country. Currently supported for addresses in Germany. Defaults to 0 [0,1] (optional)
      - returns: RequestBuilder<[Location]> 
      */
-    open class func searchWithRequestBuilder(q: String, format: Format_search, normalizecity: Normalizecity_search, addressdetails: Addressdetails_search? = nil, viewbox: String? = nil, bounded: Bounded_search? = nil, limit: Int? = nil, acceptLanguage: String? = nil, countrycodes: String? = nil, namedetails: Namedetails_search? = nil, dedupe: Dedupe_search? = nil, extratags: Extratags_search? = nil, statecode: Statecode_search? = nil) -> RequestBuilder<[Location]> {
+    open class func searchWithRequestBuilder(q: String, format: Format_search, normalizecity: Normalizecity_search, addressdetails: Addressdetails_search? = nil, viewbox: String? = nil, bounded: Bounded_search? = nil, limit: Int? = nil, acceptLanguage: String? = nil, countrycodes: String? = nil, namedetails: Namedetails_search? = nil, dedupe: Dedupe_search? = nil, extratags: Extratags_search? = nil, statecode: Statecode_search? = nil, matchquality: Int? = nil, postaladdress: Int? = nil) -> RequestBuilder<[Location]> {
         let path = "/search.php"
-        let URLString = LocationIQAPI.basePath + path
+        let URLString = OpenAPIClientAPI.basePath + path
         let parameters: [String:Any]? = nil
         
         var url = URLComponents(string: URLString)
         url?.queryItems = APIHelper.mapValuesToQueryItems([
-            "q": q, 
-            "format": format.rawValue, 
-            "normalizecity": normalizecity.rawValue, 
-            "addressdetails": addressdetails?.rawValue, 
-            "viewbox": viewbox, 
-            "bounded": bounded?.rawValue, 
+            "q": q.encodeToJSON(), 
+            "format": format.encodeToJSON(), 
+            "normalizecity": normalizecity.encodeToJSON(), 
+            "addressdetails": addressdetails?.encodeToJSON(), 
+            "viewbox": viewbox?.encodeToJSON(), 
+            "bounded": bounded?.encodeToJSON(), 
             "limit": limit?.encodeToJSON(), 
-            "accept-language": acceptLanguage, 
-            "countrycodes": countrycodes, 
-            "namedetails": namedetails?.rawValue, 
-            "dedupe": dedupe?.rawValue, 
-            "extratags": extratags?.rawValue, 
-            "statecode": statecode?.rawValue
+            "accept-language": acceptLanguage?.encodeToJSON(), 
+            "countrycodes": countrycodes?.encodeToJSON(), 
+            "namedetails": namedetails?.encodeToJSON(), 
+            "dedupe": dedupe?.encodeToJSON(), 
+            "extratags": extratags?.encodeToJSON(), 
+            "statecode": statecode?.encodeToJSON(), 
+            "matchquality": matchquality?.encodeToJSON(), 
+            "postaladdress": postaladdress?.encodeToJSON()
         ])
 
-        let requestBuilder: RequestBuilder<[Location]>.Type = LocationIQAPI.requestBuilderFactory.getBuilder()
+        let requestBuilder: RequestBuilder<[Location]>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
         return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
     }

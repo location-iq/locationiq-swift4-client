@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 
 
@@ -64,19 +63,20 @@ open class ReverseAPI {
      - parameter lon: (query) Longitude of the location to generate an address for. 
      - parameter format: (query) Format to geocode. Only JSON supported for SDKs 
      - parameter normalizecity: (query) Normalizes village to city level data to city 
-     - parameter addressdetails: (query) Include a breakdown of the address into elements. Defaults to 1. (optional, default to 1)
+     - parameter addressdetails: (query) Include a breakdown of the address into elements. Defaults to 1. (optional, default to ._1)
      - parameter acceptLanguage: (query) Preferred language order for showing search results, overrides the value specified in the Accept-Language HTTP header. Defaults to en. To use native language for the response when available, use accept-language&#x3D;native (optional)
      - parameter namedetails: (query) Include a list of alternative names in the results. These may include language variants, references, operator and brand. (optional)
      - parameter extratags: (query) Include additional information in the result if available, e.g. wikipedia link, opening hours. (optional)
      - parameter statecode: (query) Adds state or province code when available to the statecode key inside the address element. Currently supported for addresses in the USA, Canada and Australia. Defaults to 0 (optional)
+     - parameter showdistance: (query) Returns the straight line distance (meters) between the input location and the result&#39;s location. Value is set in the distance key of the response. Defaults to 0 [0,1] (optional)
+     - parameter postaladdress: (query) Returns address inside the postaladdress key, that is specifically formatted for each country. Currently supported for addresses in Germany. Defaults to 0 [0,1] (optional)
      - parameter completion: completion handler to receive the data and the error objects
      */
-    open class func reverse(lat: Double, lon: Double, format: Format_reverse, normalizecity: Normalizecity_reverse, addressdetails: Addressdetails_reverse? = nil, acceptLanguage: String? = nil, namedetails: Namedetails_reverse? = nil, extratags: Extratags_reverse? = nil, statecode: Statecode_reverse? = nil, completion: @escaping ((_ data: Location?,_ error: Error?) -> Void)) {
-        reverseWithRequestBuilder(lat: lat, lon: lon, format: format, normalizecity: normalizecity, addressdetails: addressdetails, acceptLanguage: acceptLanguage, namedetails: namedetails, extratags: extratags, statecode: statecode).execute { (response, error) -> Void in
+    open class func reverse(lat: Double, lon: Double, format: Format_reverse, normalizecity: Normalizecity_reverse, addressdetails: Addressdetails_reverse? = nil, acceptLanguage: String? = nil, namedetails: Namedetails_reverse? = nil, extratags: Extratags_reverse? = nil, statecode: Statecode_reverse? = nil, showdistance: Int? = nil, postaladdress: Int? = nil, completion: @escaping ((_ data: Location?,_ error: Error?) -> Void)) {
+        reverseWithRequestBuilder(lat: lat, lon: lon, format: format, normalizecity: normalizecity, addressdetails: addressdetails, acceptLanguage: acceptLanguage, namedetails: namedetails, extratags: extratags, statecode: statecode, showdistance: showdistance, postaladdress: postaladdress).execute { (response, error) -> Void in
             completion(response?.body, error)
         }
     }
-
 
     /**
      Reverse Geocoding
@@ -89,32 +89,36 @@ open class ReverseAPI {
      - parameter lon: (query) Longitude of the location to generate an address for. 
      - parameter format: (query) Format to geocode. Only JSON supported for SDKs 
      - parameter normalizecity: (query) Normalizes village to city level data to city 
-     - parameter addressdetails: (query) Include a breakdown of the address into elements. Defaults to 1. (optional, default to 1)
+     - parameter addressdetails: (query) Include a breakdown of the address into elements. Defaults to 1. (optional, default to ._1)
      - parameter acceptLanguage: (query) Preferred language order for showing search results, overrides the value specified in the Accept-Language HTTP header. Defaults to en. To use native language for the response when available, use accept-language&#x3D;native (optional)
      - parameter namedetails: (query) Include a list of alternative names in the results. These may include language variants, references, operator and brand. (optional)
      - parameter extratags: (query) Include additional information in the result if available, e.g. wikipedia link, opening hours. (optional)
      - parameter statecode: (query) Adds state or province code when available to the statecode key inside the address element. Currently supported for addresses in the USA, Canada and Australia. Defaults to 0 (optional)
+     - parameter showdistance: (query) Returns the straight line distance (meters) between the input location and the result&#39;s location. Value is set in the distance key of the response. Defaults to 0 [0,1] (optional)
+     - parameter postaladdress: (query) Returns address inside the postaladdress key, that is specifically formatted for each country. Currently supported for addresses in Germany. Defaults to 0 [0,1] (optional)
      - returns: RequestBuilder<Location> 
      */
-    open class func reverseWithRequestBuilder(lat: Double, lon: Double, format: Format_reverse, normalizecity: Normalizecity_reverse, addressdetails: Addressdetails_reverse? = nil, acceptLanguage: String? = nil, namedetails: Namedetails_reverse? = nil, extratags: Extratags_reverse? = nil, statecode: Statecode_reverse? = nil) -> RequestBuilder<Location> {
+    open class func reverseWithRequestBuilder(lat: Double, lon: Double, format: Format_reverse, normalizecity: Normalizecity_reverse, addressdetails: Addressdetails_reverse? = nil, acceptLanguage: String? = nil, namedetails: Namedetails_reverse? = nil, extratags: Extratags_reverse? = nil, statecode: Statecode_reverse? = nil, showdistance: Int? = nil, postaladdress: Int? = nil) -> RequestBuilder<Location> {
         let path = "/reverse.php"
-        let URLString = LocationIQAPI.basePath + path
+        let URLString = OpenAPIClientAPI.basePath + path
         let parameters: [String:Any]? = nil
         
         var url = URLComponents(string: URLString)
         url?.queryItems = APIHelper.mapValuesToQueryItems([
-            "lat": lat, 
-            "lon": lon, 
-            "format": format.rawValue, 
-            "normalizecity": normalizecity.rawValue, 
-            "addressdetails": addressdetails?.rawValue, 
-            "accept-language": acceptLanguage, 
-            "namedetails": namedetails?.rawValue, 
-            "extratags": extratags?.rawValue, 
-            "statecode": statecode?.rawValue
+            "lat": lat.encodeToJSON(), 
+            "lon": lon.encodeToJSON(), 
+            "format": format.encodeToJSON(), 
+            "normalizecity": normalizecity.encodeToJSON(), 
+            "addressdetails": addressdetails?.encodeToJSON(), 
+            "accept-language": acceptLanguage?.encodeToJSON(), 
+            "namedetails": namedetails?.encodeToJSON(), 
+            "extratags": extratags?.encodeToJSON(), 
+            "statecode": statecode?.encodeToJSON(), 
+            "showdistance": showdistance?.encodeToJSON(), 
+            "postaladdress": postaladdress?.encodeToJSON()
         ])
 
-        let requestBuilder: RequestBuilder<Location>.Type = LocationIQAPI.requestBuilderFactory.getBuilder()
+        let requestBuilder: RequestBuilder<Location>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
 
         return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
     }
