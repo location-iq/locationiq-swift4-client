@@ -65,6 +65,15 @@ open class AlamofireRequestBuilder<T>: RequestBuilder<T> {
     }
 
     /**
+     May be overridden by a subclass if you want to custom request constructor.
+     */
+    open func createURLRequest() -> URLRequest? {
+        let encoding: ParameterEncoding = isBody ? JSONDataEncoding() : URLEncoding()
+        guard let originalRequest = try? URLRequest(url: URLString, method: HTTPMethod(rawValue: method)!, headers: buildHeaders()) else { return nil }
+        return try? encoding.encode(originalRequest, with: parameters)
+    }
+
+    /**
      May be overridden by a subclass if you want to control the Content-Type
      that is given to an uploaded form part.
 
@@ -148,13 +157,13 @@ open class AlamofireRequestBuilder<T>: RequestBuilder<T> {
 
         switch T.self {
         case is String.Type:
-            validatedRequest.responseString(completionHandler: { (stringResponse) in
+            validatedRequest.responseString(queue: OpenAPIClientAPI.apiResponseQueue, completionHandler: { (stringResponse) in
                 cleanupRequest()
 
                 if stringResponse.result.isFailure {
                     completion(
                         nil,
-                        ErrorResponse.error(stringResponse.response?.statusCode ?? 500, stringResponse.data, stringResponse.result.error as Error!)
+                        ErrorResponse.error(stringResponse.response?.statusCode ?? 500, stringResponse.data, stringResponse.result.error!)
                     )
                     return
                 }
@@ -168,7 +177,7 @@ open class AlamofireRequestBuilder<T>: RequestBuilder<T> {
                 )
             })
         case is URL.Type:
-            validatedRequest.responseData(completionHandler: { (dataResponse) in
+            validatedRequest.responseData(queue: OpenAPIClientAPI.apiResponseQueue, completionHandler: { (dataResponse) in
                 cleanupRequest()
 
                 do {
@@ -218,7 +227,7 @@ open class AlamofireRequestBuilder<T>: RequestBuilder<T> {
                 return
             })
         case is Void.Type:
-            validatedRequest.responseData(completionHandler: { (voidResponse) in
+            validatedRequest.responseData(queue: OpenAPIClientAPI.apiResponseQueue, completionHandler: { (voidResponse) in
                 cleanupRequest()
 
                 if voidResponse.result.isFailure {
@@ -237,7 +246,7 @@ open class AlamofireRequestBuilder<T>: RequestBuilder<T> {
                 )
             })
         default:
-            validatedRequest.responseData(completionHandler: { (dataResponse) in
+            validatedRequest.responseData(queue: OpenAPIClientAPI.apiResponseQueue, completionHandler: { (dataResponse) in
                 cleanupRequest()
 
                 if dataResponse.result.isFailure {
@@ -350,13 +359,13 @@ open class AlamofireDecodableRequestBuilder<T:Decodable>: AlamofireRequestBuilde
 
         switch T.self {
         case is String.Type:
-            validatedRequest.responseString(completionHandler: { (stringResponse) in
+            validatedRequest.responseString(queue: OpenAPIClientAPI.apiResponseQueue, completionHandler: { (stringResponse) in
                 cleanupRequest()
 
                 if stringResponse.result.isFailure {
                     completion(
                         nil,
-                        ErrorResponse.error(stringResponse.response?.statusCode ?? 500, stringResponse.data, stringResponse.result.error as Error!)
+                        ErrorResponse.error(stringResponse.response?.statusCode ?? 500, stringResponse.data, stringResponse.result.error!)
                     )
                     return
                 }
@@ -370,7 +379,7 @@ open class AlamofireDecodableRequestBuilder<T:Decodable>: AlamofireRequestBuilde
                 )
             })
         case is Void.Type:
-            validatedRequest.responseData(completionHandler: { (voidResponse) in
+            validatedRequest.responseData(queue: OpenAPIClientAPI.apiResponseQueue, completionHandler: { (voidResponse) in
                 cleanupRequest()
 
                 if voidResponse.result.isFailure {
@@ -389,7 +398,7 @@ open class AlamofireDecodableRequestBuilder<T:Decodable>: AlamofireRequestBuilde
                 )
             })
         case is Data.Type:
-            validatedRequest.responseData(completionHandler: { (dataResponse) in
+            validatedRequest.responseData(queue: OpenAPIClientAPI.apiResponseQueue, completionHandler: { (dataResponse) in
                 cleanupRequest()
 
                 if dataResponse.result.isFailure {
@@ -409,7 +418,7 @@ open class AlamofireDecodableRequestBuilder<T:Decodable>: AlamofireRequestBuilde
                 )
             })
         default:
-            validatedRequest.responseData(completionHandler: { (dataResponse: DataResponse<Data>) in
+            validatedRequest.responseData(queue: OpenAPIClientAPI.apiResponseQueue, completionHandler: { (dataResponse: DataResponse<Data>) in
                 cleanupRequest()
 
                 guard dataResponse.result.isSuccess else {
