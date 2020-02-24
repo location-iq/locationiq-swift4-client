@@ -6,7 +6,7 @@
 
 import Foundation
 
-open class OpenAPIClientAPI {
+open class LocationIQAPI {
     public static var basePath = "https://eu1.locationiq.com/v1"
     public static var credential: URLCredential?
     public static var customHeaders: [String:String] = [:]
@@ -32,7 +32,7 @@ open class RequestBuilder<T> {
         self.isBody = isBody
         self.headers = headers
 
-        addHeaders(OpenAPIClientAPI.customHeaders)
+        addHeaders(LocationIQAPI.customHeaders)
     }
 
     open func addHeaders(_ aHeaders:[String:String]) {
@@ -51,7 +51,7 @@ open class RequestBuilder<T> {
     }
 
     open func addCredential() -> Self {
-        self.credential = OpenAPIClientAPI.credential
+        self.credential = LocationIQAPI.credential
         return self
     }
 }

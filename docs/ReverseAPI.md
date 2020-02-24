@@ -19,7 +19,7 @@ Reverse geocoding is the process of converting a coordinate or location (latitud
 ### Example 
 ```swift
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
-import OpenAPIClient
+import LocationIQ
 
 let lat = 987 // Double | Latitude of the location to generate an address for.
 let lon = 987 // Double | Longitude of the location to generate an address for.

@@ -1,10 +1,10 @@
-name: OpenAPIClient
+name: LocationIQ
 targets:
-  OpenAPIClient:
+  LocationIQ:
     type: framework
     platform: iOS
     deploymentTarget: "10.0"
-    sources: [OpenAPIClient]
+    sources: [LocationIQ]
     info:
       path: ./Info.plist
       version: 1.1.0

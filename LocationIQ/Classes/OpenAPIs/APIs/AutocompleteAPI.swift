@@ -61,7 +61,7 @@ open class AutocompleteAPI {
      */
     open class func autocompleteWithRequestBuilder(q: String, normalizecity: Normalizecity_autocomplete, limit: Int? = nil, viewbox: String? = nil, bounded: Bounded_autocomplete? = nil, countrycodes: String? = nil, acceptLanguage: String? = nil, tag: String? = nil) -> RequestBuilder<[Any]> {
         let path = "/autocomplete.php"
-        let URLString = OpenAPIClientAPI.basePath + path
+        let URLString = LocationIQAPI.basePath + path
         let parameters: [String:Any]? = nil
         
         var url = URLComponents(string: URLString)
@@ -76,7 +76,7 @@ open class AutocompleteAPI {
             "tag": tag?.encodeToJSON()
         ])
 
-        let requestBuilder: RequestBuilder<[Any]>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+        let requestBuilder: RequestBuilder<[Any]>.Type = LocationIQAPI.requestBuilderFactory.getBuilder()
 
         return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
     }

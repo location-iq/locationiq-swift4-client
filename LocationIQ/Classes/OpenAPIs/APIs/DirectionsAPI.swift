@@ -59,7 +59,7 @@ open class DirectionsAPI {
         let coordinatesPreEscape = "\(APIHelper.mapValueToPathItem(coordinates))"
         let coordinatesPostEscape = coordinatesPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         path = path.replacingOccurrences(of: "{coordinates}", with: coordinatesPostEscape, options: .literal, range: nil)
-        let URLString = OpenAPIClientAPI.basePath + path
+        let URLString = LocationIQAPI.basePath + path
         let parameters: [String:Any]? = nil
         
         var url = URLComponents(string: URLString)
@@ -77,7 +77,7 @@ open class DirectionsAPI {
             "continue_straight": continueStraight?.encodeToJSON()
         ])
 
-        let requestBuilder: RequestBuilder<DirectionsDirections>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+        let requestBuilder: RequestBuilder<DirectionsDirections>.Type = LocationIQAPI.requestBuilderFactory.getBuilder()
 
         return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
     }

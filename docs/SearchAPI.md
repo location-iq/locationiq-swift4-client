@@ -19,7 +19,7 @@ The Search API allows converting addresses, such as a street address, into geogr
 ### Example 
 ```swift
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
-import OpenAPIClient
+import LocationIQ
 
 let q = "q_example" // String | Address to geocode
 let format = "format_example" // String | Format to geocode. Only JSON supported for SDKs

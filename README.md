@@ -1,4 +1,4 @@
-# Swift4 API client for OpenAPIClient
+# Swift4 API client for LocationIQ
 
 LocationIQ provides flexible enterprise-grade location based solutions. We work with developers, startups and enterprises worldwide serving billions of requests everyday. This page provides an overview of the technical aspects of our API and will help you get started.
 
