@@ -19,7 +19,7 @@ The Balance API provides a count of request credits left in the user's account f
 ### Example 
 ```swift
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
-import OpenAPIClient
+import LocationIQ
 
 
 BalanceAPI.balance() { (response, error) in

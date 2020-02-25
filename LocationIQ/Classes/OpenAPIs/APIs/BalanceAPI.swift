@@ -30,12 +30,12 @@ open class BalanceAPI {
      */
     open class func balanceWithRequestBuilder() -> RequestBuilder<Balance> {
         let path = "/balance.php"
-        let URLString = OpenAPIClientAPI.basePath + path
+        let URLString = LocationIQAPI.basePath + path
         let parameters: [String:Any]? = nil
         
         let url = URLComponents(string: URLString)
 
-        let requestBuilder: RequestBuilder<Balance>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+        let requestBuilder: RequestBuilder<Balance>.Type = LocationIQAPI.requestBuilderFactory.getBuilder()
 
         return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
     }

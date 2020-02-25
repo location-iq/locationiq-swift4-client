@@ -100,7 +100,7 @@ open class ReverseAPI {
      */
     open class func reverseWithRequestBuilder(lat: Double, lon: Double, format: Format_reverse, normalizecity: Normalizecity_reverse, addressdetails: Addressdetails_reverse? = nil, acceptLanguage: String? = nil, namedetails: Namedetails_reverse? = nil, extratags: Extratags_reverse? = nil, statecode: Statecode_reverse? = nil, showdistance: Int? = nil, postaladdress: Int? = nil) -> RequestBuilder<Location> {
         let path = "/reverse.php"
-        let URLString = OpenAPIClientAPI.basePath + path
+        let URLString = LocationIQAPI.basePath + path
         let parameters: [String:Any]? = nil
         
         var url = URLComponents(string: URLString)
@@ -118,7 +118,7 @@ open class ReverseAPI {
             "postaladdress": postaladdress?.encodeToJSON()
         ])
 
-        let requestBuilder: RequestBuilder<Location>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+        let requestBuilder: RequestBuilder<Location>.Type = LocationIQAPI.requestBuilderFactory.getBuilder()
 
         return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
     }

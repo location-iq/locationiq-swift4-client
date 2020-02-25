@@ -57,7 +57,7 @@ open class MatrixAPI {
         let coordinatesPreEscape = "\(APIHelper.mapValueToPathItem(coordinates))"
         let coordinatesPostEscape = coordinatesPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         path = path.replacingOccurrences(of: "{coordinates}", with: coordinatesPostEscape, options: .literal, range: nil)
-        let URLString = OpenAPIClientAPI.basePath + path
+        let URLString = LocationIQAPI.basePath + path
         let parameters: [String:Any]? = nil
         
         var url = URLComponents(string: URLString)
@@ -74,7 +74,7 @@ open class MatrixAPI {
             "fallback_coordinate": fallbackCoordinate?.encodeToJSON()
         ])
 
-        let requestBuilder: RequestBuilder<DirectionsMatrix>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+        let requestBuilder: RequestBuilder<DirectionsMatrix>.Type = LocationIQAPI.requestBuilderFactory.getBuilder()
 
         return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
     }

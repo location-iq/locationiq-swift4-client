@@ -124,7 +124,7 @@ open class SearchAPI {
      */
     open class func searchWithRequestBuilder(q: String, format: Format_search, normalizecity: Normalizecity_search, addressdetails: Addressdetails_search? = nil, viewbox: String? = nil, bounded: Bounded_search? = nil, limit: Int? = nil, acceptLanguage: String? = nil, countrycodes: String? = nil, namedetails: Namedetails_search? = nil, dedupe: Dedupe_search? = nil, extratags: Extratags_search? = nil, statecode: Statecode_search? = nil, matchquality: Int? = nil, postaladdress: Int? = nil) -> RequestBuilder<[Location]> {
         let path = "/search.php"
-        let URLString = OpenAPIClientAPI.basePath + path
+        let URLString = LocationIQAPI.basePath + path
         let parameters: [String:Any]? = nil
         
         var url = URLComponents(string: URLString)
@@ -146,7 +146,7 @@ open class SearchAPI {
             "postaladdress": postaladdress?.encodeToJSON()
         ])
 
-        let requestBuilder: RequestBuilder<[Location]>.Type = OpenAPIClientAPI.requestBuilderFactory.getBuilder()
+        let requestBuilder: RequestBuilder<[Location]>.Type = LocationIQAPI.requestBuilderFactory.getBuilder()
 
         return requestBuilder.init(method: "GET", URLString: (url?.string ?? URLString), parameters: parameters, isBody: false)
     }
